@@ -122,7 +122,7 @@ def addproduct():
 
 def getproductdetails():
 
-    connection=pymysql.connect(user="root", host="localhost", password="", database="farasisokogarden")
+    connection=pymysql.connect(user="root", host="localhost", password="", database="simbasokogarden")
 
     cursor=connection.cursor(pymysql.cursors.DictCursor)
 
@@ -133,10 +133,16 @@ def getproductdetails():
     productdetails=cursor.fetchall()
 
     return(productdetails)
+#mpesa API
+
+##MAKING HTTP request to safaricom
 
 import requests
+#is a standard Python module that allows you to:Get the current date and time"Format dates:Compare dates"Add or subtract time:Create timestamps (like in your M-Pesa code
 import datetime
+#library that allows you to secure your password
 import base64
+#authenticating the user---verifying the user
 from requests.auth import HTTPBasicAuth
 
 @app.route('/api/mpesa_payment', methods=['POST'])
@@ -170,6 +176,8 @@ def mpesa_payment():
         encoded = base64.b64encode(data.encode())
         password = encoded.decode()
 
+        
+
         # BODY OR PAYLOAD
         payload = {
         "BusinessShortCode": "174379",
@@ -181,7 +189,7 @@ def mpesa_payment():
         "PartyB": "174379",
         "PhoneNumber": phone,
         "CallBackURL": "https://coding.co.ke/api/confirm.php",
-        "AccountReference": " chui SokoGarden Online",
+        "AccountReference": " simba SokoGarden Online",
         "TransactionDesc": "Payments for Products"
         }
 
@@ -194,7 +202,7 @@ def mpesa_payment():
         # Specify STK Push Trigger URL
         url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
         # Create a POST Request to above url, providing headers, payload
-        # Below triggers an STK Push to the phone number indicated in the payload and the amount.
+        # Below triggers an STK Push to the phone number indicated in the payload and the amount.--prompt
         response = requests.post(url, json=payload, headers=headers)
         print(response.text) #
         # Give a Response
